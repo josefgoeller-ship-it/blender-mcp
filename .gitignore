@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+.env
+
+# Local editor / session junk
+.cursor/
+.chimera-sigil/
+
+# Unrelated local experiment sitting in this folder
+substack-lite/
+
+# Generated .blend files, renders and job scratch files
+output/*
+!output/.gitkeep
+*.blend
+*.blend1
+
+# Built addon archives
+dist/

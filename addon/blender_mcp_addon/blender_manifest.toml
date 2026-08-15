@@ -1,0 +1,24 @@
+schema_version = "1.0.0"
+
+id = "blender_mcp_bridge"
+version = "0.2.0"
+name = "Blender MCP Bridge"
+tagline = "Lets the blender-mcp server drive this Blender session"
+maintainer = "josef"
+type = "add-on"
+
+blender_version_min = "4.2.0"
+
+license = ["SPDX:MIT"]
+tags = ["Development"]
+
+[permissions]
+network = "Accepts local requests from the blender-mcp server"
+files = "Saves .blend files and renders where you ask it to"
+
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  "/*.zip",
+]

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Library · blender-mcp{% endblock %}
+{% block content %}
+<section class="library">
+  <h1>Library</h1>
+  {% if not jobs %}
+  <p class="lede">No jobs yet. Create one from the home page.</p>
+  {% else %}
+  <ul class="job-list">
+    {% for job in jobs %}
+    <li>
+      <a href="/jobs/{{ job.id }}">
+        <strong>{{ job.prompt[:100] }}{% if job.prompt|length > 100 %}…{% endif %}</strong>
+        <span>{{ job.status }} · {{ job.created_at[:19] }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endblock %}

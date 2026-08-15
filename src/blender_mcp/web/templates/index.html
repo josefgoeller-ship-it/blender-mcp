@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <p class="brand-mark">blender-mcp</p>
+  <h1>Guide with a picture. Build a Blender scene.</h1>
+  <p class="lede">Upload reference images, describe what you want, and generate a .blend with iterative previews.</p>
+
+  <form class="generate" action="/generate" method="post" enctype="multipart/form-data">
+    <label class="field">
+      <span>Prompt</span>
+      <textarea name="prompt" rows="4" required placeholder="A copper icosphere on a studio floor, surrounded by six small cubes…"></textarea>
+    </label>
+    <label class="field">
+      <span>Reference images</span>
+      <input type="file" name="references" accept="image/*" multiple />
+    </label>
+    <button type="submit">Generate</button>
+  </form>
+
+  {% if not llm_ready %}
+  <p class="note">No LLM API key in <code>.env</code> yet — you can still upload refs and open the job, then run generation from Cursor with the MCP tools. Or set <code>BLENDER_MCP_LLM_API_KEY</code> to generate here.</p>
+  {% endif %}
+</section>
+
+{% if recent %}
+<section class="recent">
+  <h2>Recent</h2>
+  <ul>
+    {% for job in recent %}
+    <li><a href="/jobs/{{ job.id }}">{{ job.prompt[:80] }}{% if job.prompt|length > 80 %}…{% endif %}</a> <em>{{ job.status }}</em></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

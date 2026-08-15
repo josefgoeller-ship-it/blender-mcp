@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Job {{ job.id }} · blender-mcp{% endblock %}
+{% block content %}
+<section class="job">
+  <p class="eyebrow">Job {{ job.id }} · {{ job.status }}</p>
+  <h1>{{ job.prompt }}</h1>
+
+  {% if job.status == "queued" and not llm_ready %}
+  <p class="note">
+    This job is waiting. In Cursor, ask the agent to build it using the refs under
+    <code>output/jobs/{{ job.id }}/refs</code>, or add <code>BLENDER_MCP_LLM_API_KEY</code> and
+    <form class="inline" action="/jobs/{{ job.id }}/start" method="post"><button type="submit">Start generation</button></form>
+  </p>
+  {% elif job.status in ["queued", "error"] and llm_ready %}
+  <form action="/jobs/{{ job.id }}/start" method="post"><button type="submit">Start / retry generation</button></form>
+  {% endif %}
+
+  {% if job.error %}
+  <p class="error">{{ job.error }}</p>
+  {% endif %}
+
+  {% if refs %}
+  <h2>References</h2>
+  <div class="gallery">
+    {% for name in refs %}
+    <figure><img src="/jobs/{{ job.id }}/files/refs/{{ name }}" alt="{{ name }}" /><figcaption>{{ name }}</figcaption></figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if previews %}
+  <h2>Previews</h2>
+  <div class="gallery">
+    {% for name in previews %}
+    <figure><img src="/jobs/{{ job.id }}/files/previews/{{ name }}" alt="{{ name }}" /><figcaption>{{ name }}</figcaption></figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if finals %}
+  <h2>Final</h2>
+  <div class="gallery">
+    {% for name in finals %}
+    <figure><img src="/jobs/{{ job.id }}/files/final/{{ name }}" alt="{{ name }}" /><figcaption>{{ name }}</figcaption></figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <p class="actions">
+    <a href="/jobs/{{ job.id }}/blend">Download .blend</a>
+  </p>
+
+  {% if job.log %}
+  <h2>Log</h2>
+  <pre class="log">{{ job.log | join('\n') }}</pre>
+  {% endif %}
+</section>
+
+{% if job.status == "running" %}
+<script>setTimeout(() => location.reload(), 4000)</script>
+{% endif %}
+{% endblock %}
