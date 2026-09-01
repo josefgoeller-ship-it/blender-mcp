@@ -291,6 +291,12 @@ def pack_sheet(fig1: Path, front: Path, side: Path, top: Path, dest: Path) -> st
 
 
 def main() -> int:
+    try:
+        from PIL import Image  # noqa: F401
+    except ImportError:
+        print("Missing dependency: pillow. Run: uv sync")
+        return 1
+
     settings = get_settings()
     src = settings.output_dir / "space_habitat" / "habitat_cinematic.blend"
     blend = settings.output_dir / "space_habitat" / "habitat_patent.blend"

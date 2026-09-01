@@ -36,11 +36,22 @@ def tweak(name, **kwargs):
     if not m or not m.use_nodes:
         return
     bsdf = next((n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None)
-    if not bsdf:
-        return
-    for k, v in kwargs.items():
-        if k in bsdf.inputs:
-            bsdf.inputs[k].default_value = v
+    emit = next((n for n in m.node_tree.nodes if n.type == "EMISSION"), None)
+    if bsdf:
+        for k, v in kwargs.items():
+            if k in bsdf.inputs:
+                bsdf.inputs[k].default_value = v
+    if emit:
+        emit_keys = {
+            "Emission Color": "Color",
+            "Emission Strength": "Strength",
+            "Color": "Color",
+            "Strength": "Strength",
+        }
+        for k, v in kwargs.items():
+            sock = emit_keys.get(k, k)
+            if sock in emit.inputs:
+                emit.inputs[sock].default_value = v
 
 tweak("HullMetal", **{"Base Color": (0.62, 0.66, 0.72, 1), "Roughness": 0.32, "Metallic": 1.0, "Coat Weight": 0.4})
 tweak("HullDark", **{"Base Color": (0.22, 0.24, 0.28, 1), "Roughness": 0.5, "Metallic": 1.0})
@@ -126,10 +137,13 @@ if cam:
     if cam.data:
         cam.data.lens = 50.0
 
-# Stronger sun for metal catchlights
+# Stronger sun for metal catchlights (SUN Watts vs AREA area-light units)
 sun = D.objects.get("SunKey")
 if sun and sun.data:
-    sun.data.energy = 2400.0
+    if sun.data.type == "SUN":
+        sun.data.energy = 8.5
+    else:
+        sun.data.energy = 2400.0
 rim = D.objects.get("Rim")
 if rim and rim.data:
     rim.data.energy = 900.0

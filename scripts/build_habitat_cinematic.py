@@ -498,7 +498,7 @@ def make_ship(tag, loc, yaw, size):
         loc[1] + 0.15 * size * _m.cos(yaw),
         loc[2],
     )
-    add_cube(f"ShipWingL_{tag}", (loc[0], loc[1], loc[2]), (size * 0.5, size * 1.1, size * 0.06), (0, 0, yaw), truss, hull_o)
+    add_cube(f"ShipWingL_{tag}", w1, (size * 0.5, size * 1.1, size * 0.06), (0, 0, yaw), truss, hull_o)
     add_cyl(
         f"ShipEx_{tag}",
         (loc[0] - size * 1.15 * _m.cos(yaw), loc[1] - size * 1.15 * _m.sin(yaw), loc[2]),

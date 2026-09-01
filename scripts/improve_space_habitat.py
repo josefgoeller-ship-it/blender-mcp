@@ -324,7 +324,7 @@ def make_window(tag, loc, rot, size=(0.08, 0.48, 0.30), light_energy=0.0):
     smooth_obj(gl)
     parent_root(gl)
 
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=loc)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=glass_loc)
     gp = C.active_object
     gp.name = f"WinGlow_{tag}"
     gp.scale = (sx * 0.18, sy * 0.84, sz * 0.80)
